@@ -1,2 +1,3 @@
 lib/*
 !lib/PLACE_LIBS_HERE
+build/
