@@ -13,7 +13,7 @@ int main() {
     if (startserver(RESPONSE_PORT) != 0)
         printf("Failed to start the client.\n");
 
-    msg[0] = LIST_REQUEST;
+    set_message_code(msg, LIST_REQUEST);
     msg[1] = msg[2] = 0;
     msg[3] = 4;
     printf("Sending message to server...\n");
@@ -25,7 +25,7 @@ int main() {
     char buffer[1024] = {0};
     getmsg(buffer);
     printf("Got response!\n");
-    printf("Response type: %c\n", buffer[0]);
+    printf("Response type: %c\n", get_message_code(buffer));
 
     uint32_t size = read_size_from_message(buffer);
     

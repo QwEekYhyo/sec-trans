@@ -18,7 +18,7 @@ void handle_list_request(char* buffer) {
         return;
     }
 
-    buffer[0] = LIST_RESPONSE;
+    set_message_code(buffer, LIST_RESPONSE);
 
     unsigned int buffer_pos = 7;
     uint32_t total_size = 0;
@@ -57,7 +57,7 @@ int main() {
     char buffer[1024];
     while (1) {
         getmsg(buffer);
-        if (buffer[0] == LIST_REQUEST)
+        if (get_message_code(buffer) == LIST_REQUEST)
             handle_list_request(buffer);
     }
 

@@ -21,3 +21,11 @@ uint32_t read_size_from_message(char* msg) {
     sscanf(hex_size, "%X", &size);
     return size;
 }
+
+char get_message_code(char* message) {
+    return *message;
+}
+
+void set_message_code(char* message, char code) {
+    message[0] = code;
+}
