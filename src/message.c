@@ -16,7 +16,6 @@ void write_size_to_message(char* msg, uint32_t size) {
 uint32_t read_size_from_message(char* msg) {
     char hex_size[7];
     memcpy(hex_size, msg + 1, 6);
-    printf("last char: %d\n", hex_size[6]);
     uint32_t size;
     sscanf(hex_size, "%X", &size);
     return size;

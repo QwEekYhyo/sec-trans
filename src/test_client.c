@@ -14,8 +14,7 @@ int main() {
         printf("Failed to start the client.\n");
 
     set_message_code(msg, LIST_REQUEST);
-    msg[1] = msg[2] = 0;
-    msg[3] = 4;
+    write_size_to_message(msg, 0);
     printf("Sending message to server...\n");
     int error_code = sndmsg(msg, SERVER_PORT);
 
