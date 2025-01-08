@@ -1,5 +1,5 @@
 #include <client.h>
-#include <commands.h>
+#include <codes.h>
 #include <common_defs.h>
 #include <message.h>
 #include <server.h>

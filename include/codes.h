@@ -1,5 +1,5 @@
-#ifndef SECTRANS_COMMANDS_H
-#define SECTRANS_COMMANDS_H
+#ifndef SECTRANS_CODES_H
+#define SECTRANS_CODES_H
 
 typedef enum {
     LIST_REQUEST = 'L',
@@ -14,4 +14,4 @@ typedef enum {
     UPLOAD_RESPONSE = 'u',
 } ResponseType;
 
-#endif // SECTRANS_COMMANDS_H
+#endif // SECTRANS_CODES_H
