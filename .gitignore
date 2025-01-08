@@ -2,3 +2,4 @@ lib/*
 !lib/PLACE_LIBS_HERE
 build/
 .cache/
+dist/
