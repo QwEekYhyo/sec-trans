@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-static char msg[1024];
+static char msg[PACKET_SIZE];
 
 void debug_response(const char* buffer) {
     printf("Got response!\n");
@@ -37,7 +37,7 @@ int main() {
     printf("Sent message with code: %d\n", error_code);
     printf("Waiting for response...\n");
 
-    char buffer[1024] = {0};
+    char buffer[PACKET_SIZE] = {0};
     getmsg(buffer);
     debug_response(buffer);
 

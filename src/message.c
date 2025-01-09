@@ -1,6 +1,5 @@
 #include <client.h>
 #include <codes.h>
-#include <common_defs.h>
 #include <message.h>
 
 #include <string.h>
@@ -32,7 +31,7 @@ void set_message_code(char* message, char code) {
     message[0] = code;
 }
 
-int send_error(char buffer[1024], const char* error_message, unsigned int port) {
+int send_error(char buffer[PACKET_SIZE], const char* error_message, unsigned int port) {
     set_message_code(buffer, ERROR);
     const unsigned int len = strlen(error_message);
     memcpy(buffer + HEADER_SIZE, error_message, len);

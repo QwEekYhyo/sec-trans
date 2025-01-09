@@ -32,7 +32,7 @@ void handle_list_request(char* buffer) {
         unsigned int file_name_len = strlen(entry->d_name);
         // If the filename would take too much space, discard it
         // TODO: do this better
-        if (buffer_pos + file_name_len + 1 > 1024)
+        if (buffer_pos + file_name_len + 1 > MAX_BODY_SIZE)
             continue;
 
         strncpy(buffer + buffer_pos, entry->d_name, file_name_len);
@@ -64,7 +64,7 @@ int main() {
     else
         printf("Failed to start the server.\n");
 
-    char buffer[1024];
+    char buffer[PACKET_SIZE];
     while (1) {
         getmsg(buffer);
         switch (get_message_code(buffer)) {
