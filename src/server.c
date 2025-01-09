@@ -53,6 +53,11 @@ void handle_download_request(char* buffer) {
     send_file(buffer, buffer + HEADER_SIZE, RESPONSE_PORT);
 }
 
+void handle_upload_request(char* buffer) {
+    printf("Someone asked to upload a file\n");
+    receive_file(buffer, buffer + HEADER_SIZE);
+}
+
 int main() {
     printf("Starting server on port 8080...\n");
     if (startserver(SERVER_PORT) == 0)
@@ -69,6 +74,9 @@ int main() {
                 break;
             case DOWNLOAD_REQUEST:
                 handle_download_request(buffer);
+                break;
+            case UPLOAD_REQUEST:
+                handle_upload_request(buffer);
                 break;
             default:
                 break;

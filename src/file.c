@@ -3,9 +3,11 @@
 #include <common_defs.h>
 #include <message.h>
 #include <file.h>
+#include <server.h>
 
 #include <fcntl.h>
 #include <libgen.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -39,4 +41,38 @@ void send_file(char buffer[PACKET_SIZE], const char* file_name, unsigned int por
     buffer[HEADER_SIZE + 1] = 'K';
     write_size_to_message(buffer, 2);
     sndmsg(buffer, port);
+}
+
+void receive_file(char buffer[PACKET_SIZE], const char* file_name) {
+    char sanitized_file_name[MAX_FILENAME_LENGTH + 6] = "dist/";
+    const char* base_name = basename((char*) file_name);
+    strncat(sanitized_file_name, base_name, MAX_FILENAME_LENGTH);
+
+    int fd = open(sanitized_file_name, O_WRONLY | O_CREAT | O_EXCL | O_APPEND, 0644);
+    if (fd == -1) {
+        send_error(buffer, "Server could not create file", RESPONSE_PORT);
+        return;
+    }
+
+    ResponseType code;
+    uint32_t chunk_size;
+    do {
+        getmsg(buffer);
+        code = get_message_code(buffer);
+        if (code == FILE_CHUNK) {
+            chunk_size = read_size_from_message(buffer);
+            write(fd, buffer + HEADER_SIZE, chunk_size);
+        }
+    } while (code != UPLOAD_DONE && code != ERROR);
+
+    close(fd);
+
+    if (code == UPLOAD_DONE) {
+        set_message_code(buffer, UPLOAD_RESPONSE);
+        buffer[HEADER_SIZE] = 'O';
+        buffer[HEADER_SIZE + 1] = 'K';
+        write_size_to_message(buffer, 2);
+        sndmsg(buffer, RESPONSE_PORT);
+    } else // ERROR
+        send_error(buffer, "Error during upload", RESPONSE_PORT);
 }

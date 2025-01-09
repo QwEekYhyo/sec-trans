@@ -4,9 +4,11 @@
 #include <message.h>
 #include <server.h>
 
+#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 static char msg[PACKET_SIZE];
 
@@ -45,8 +47,8 @@ int main() {
     /* Download test */
 
     set_message_code(msg, DOWNLOAD_REQUEST);
-    const char* file = "../secretfolder/../../thing";
-    const unsigned int len = strlen(file);
+    char* file = "../secretfolder/../../thing";
+    unsigned int len = strlen(file);
     write_size_to_message(msg, len);
     for (int i = 0; i < len; i++)
         msg[i + HEADER_SIZE] = file[i];
@@ -60,6 +62,39 @@ int main() {
         code = get_message_code(buffer);
         debug_response(buffer);
     } while (code != DOWNLOAD_RESPONSE && code != ERROR);
+
+    /* Upload test */
+    set_message_code(msg, UPLOAD_REQUEST);
+    file = "testfile.txt";
+    len = strlen(file);
+    write_size_to_message(msg, len);
+    for (int i = 0; i < len; i++)
+        msg[i + HEADER_SIZE] = file[i];
+
+    msg[HEADER_SIZE + len] = '\0';
+    sndmsg(msg, SERVER_PORT);
+    printf("Waiting for response...\n");
+
+    int fd = open(file, O_RDONLY);
+    ssize_t read_bytes;
+    while (1) {
+        read_bytes = read(fd, msg + HEADER_SIZE, MAX_BODY_SIZE);
+        if (read_bytes == -1 || read_bytes == 0) break;
+
+        set_message_code(msg, FILE_CHUNK);
+        write_size_to_message(msg, read_bytes);
+        sndmsg(msg, SERVER_PORT);
+        if (read_bytes < MAX_BODY_SIZE) break;
+    }
+
+    close(fd);
+
+    set_message_code(msg, UPLOAD_DONE);
+    write_size_to_message(msg, 0);
+    sndmsg(msg, SERVER_PORT);
+
+    getmsg(buffer);
+    debug_response(buffer);
 
     stopserver();
 

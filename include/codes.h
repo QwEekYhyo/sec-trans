@@ -12,6 +12,7 @@ typedef enum {
     DOWNLOAD_RESPONSE = 'd',
     FILE_CHUNK = 'f',
     UPLOAD_RESPONSE = 'u',
+    UPLOAD_DONE = 'o',
     ERROR = 'e',
 } ResponseType;
 
