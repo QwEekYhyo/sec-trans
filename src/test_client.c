@@ -32,7 +32,7 @@ int main() {
 
     printf("Response body:\n");
     for (uint32_t i = 0; i < size; i++)
-        putchar(buffer[i + 7]);
+        putchar(buffer[i + HEADER_SIZE]);
     putchar('\n');
 
     stopserver();

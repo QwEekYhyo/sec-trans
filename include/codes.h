@@ -12,6 +12,7 @@ typedef enum {
     DOWNLOAD_RESPONSE = 'd',
     FILE_CHUNK = 'f',
     UPLOAD_RESPONSE = 'u',
+    ERROR = 'e',
 } ResponseType;
 
 #endif // SECTRANS_CODES_H

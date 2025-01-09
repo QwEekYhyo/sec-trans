@@ -5,4 +5,8 @@
 // RESPONSE_PORT is temporary, they should change at every request
 #define RESPONSE_PORT 8888
 
+#define HEADER_CODE_SIZE 1
+#define HEADER_LENGTH_SIZE 6
+#define HEADER_SIZE HEADER_CODE_SIZE + HEADER_LENGTH_SIZE
+
 #endif // SECTRANS_COMMON_DEFS_H

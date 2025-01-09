@@ -20,7 +20,7 @@ void handle_list_request(char* buffer) {
 
     set_message_code(buffer, LIST_RESPONSE);
 
-    unsigned int buffer_pos = 7;
+    unsigned int buffer_pos = HEADER_SIZE;
     uint32_t total_size = 0;
 
     struct dirent* entry;
