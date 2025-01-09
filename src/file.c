@@ -56,6 +56,7 @@ void receive_file(char buffer[PACKET_SIZE], const char* file_name) {
 
     ResponseType code;
     uint32_t chunk_size;
+    /* Need to add a timeout here */
     do {
         getmsg(buffer);
         code = get_message_code(buffer);

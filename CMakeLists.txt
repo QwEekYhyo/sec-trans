@@ -11,5 +11,5 @@ link_directories(lib)
 add_executable(sectrans-server ${SERVER_SOURCES} ${COMMON_SOURCES})
 target_link_libraries(sectrans-server server client)
 
-add_executable(test_client src/test_client.c ${COMMON_SOURCES})
-target_link_libraries(test_client server client)
+add_executable(sectrans-client src/client.c ${COMMON_SOURCES})
+target_link_libraries(sectrans-client server client)
