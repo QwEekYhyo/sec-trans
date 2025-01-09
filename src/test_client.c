@@ -52,8 +52,12 @@ int main() {
     sndmsg(msg, SERVER_PORT);
     printf("Waiting for response...\n");
 
-    getmsg(buffer);
-    debug_response(buffer);
+    ResponseType code;
+    do {
+        getmsg(buffer);
+        code = get_message_code(buffer);
+        debug_response(buffer);
+    } while (code != DOWNLOAD_RESPONSE && code != ERROR);
 
     stopserver();
 
