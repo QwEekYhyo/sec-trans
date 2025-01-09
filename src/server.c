@@ -49,10 +49,6 @@ void handle_list_request(char* buffer) {
 }
 
 void handle_download_request(char* buffer) {
-    /* Not sure if having the filename inside the buffer used to WRITE the response is a good idea */
-    /* Also we need to sanitize and check the filename so that user does not request a file
-     * that is outside the dist folder
-     */
     printf("Someone asked to download a file\n");
     send_file(buffer, buffer + HEADER_SIZE, RESPONSE_PORT);
 }

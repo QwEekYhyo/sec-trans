@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 static char msg[PACKET_SIZE];
 
@@ -44,11 +45,12 @@ int main() {
     /* Download test */
 
     set_message_code(msg, DOWNLOAD_REQUEST);
-    const char* file = "dist/thing";
-    write_size_to_message(msg, 10);
-    for (int i = 0; i < 10; i++)
+    const char* file = "../secretfolder/../../thing";
+    const unsigned int len = strlen(file);
+    write_size_to_message(msg, len);
+    for (int i = 0; i < len; i++)
         msg[i + HEADER_SIZE] = file[i];
-    msg[HEADER_SIZE + 10] = '\0';
+    msg[HEADER_SIZE + len] = '\0';
     sndmsg(msg, SERVER_PORT);
     printf("Waiting for response...\n");
 

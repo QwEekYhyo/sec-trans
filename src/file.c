@@ -5,11 +5,17 @@
 #include <file.h>
 
 #include <fcntl.h>
+#include <libgen.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 void send_file(char buffer[PACKET_SIZE], const char* file_name, unsigned int port) {
-    int fd = open(file_name, O_RDONLY);
+    char sanitized_file_name[MAX_FILENAME_LENGTH + 6] = "dist/";
+    const char* base_name = basename((char*) file_name);
+    strncat(sanitized_file_name, base_name, MAX_FILENAME_LENGTH);
+
+    int fd = open(sanitized_file_name, O_RDONLY);
     if (fd == -1) {
         send_error(buffer, "File does not exists", port);
         return;
