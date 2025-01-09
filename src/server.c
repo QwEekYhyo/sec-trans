@@ -1,6 +1,7 @@
 #include <client.h>
 #include <codes.h>
 #include <common_defs.h>
+#include <file.h>
 #include <message.h>
 #include <server.h>
 
@@ -47,6 +48,15 @@ void handle_list_request(char* buffer) {
     sndmsg(buffer, RESPONSE_PORT);
 }
 
+void handle_download_request(char* buffer) {
+    /* Not sure if having the filename inside the buffer used to WRITE the response is a good idea */
+    /* Also we need to sanitize and check the filename so that user does not request a file
+     * that is outside the dist folder
+     */
+    printf("Someone asked to download a file\n");
+    send_file(buffer, buffer + HEADER_SIZE, RESPONSE_PORT);
+}
+
 int main() {
     printf("Starting server on port 8080...\n");
     if (startserver(SERVER_PORT) == 0)
@@ -57,8 +67,16 @@ int main() {
     char buffer[1024];
     while (1) {
         getmsg(buffer);
-        if (get_message_code(buffer) == LIST_REQUEST)
-            handle_list_request(buffer);
+        switch (get_message_code(buffer)) {
+            case LIST_REQUEST:
+                handle_list_request(buffer);
+                break;
+            case DOWNLOAD_REQUEST:
+                handle_download_request(buffer);
+                break;
+            default:
+                break;
+        }
     }
 
     return 0;

@@ -1,3 +1,5 @@
+#include <client.h>
+#include <codes.h>
 #include <common_defs.h>
 #include <message.h>
 
@@ -14,7 +16,7 @@ void write_size_to_message(char* msg, uint32_t size) {
     }
 }
 
-uint32_t read_size_from_message(char* msg) {
+uint32_t read_size_from_message(const char* msg) {
     char hex_size[HEADER_LENGTH_SIZE + 1];
     memcpy(hex_size, msg + HEADER_CODE_SIZE, HEADER_LENGTH_SIZE);
     uint32_t size;
@@ -22,10 +24,18 @@ uint32_t read_size_from_message(char* msg) {
     return size;
 }
 
-char get_message_code(char* message) {
+char get_message_code(const char* message) {
     return *message;
 }
 
 void set_message_code(char* message, char code) {
     message[0] = code;
+}
+
+int send_error(char buffer[1024], const char* error_message, unsigned int port) {
+    set_message_code(buffer, ERROR);
+    const unsigned int len = strlen(error_message);
+    memcpy(buffer + HEADER_SIZE, error_message, len);
+    write_size_to_message(buffer, len);
+    return sndmsg(buffer, port);
 }
